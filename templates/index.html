@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="AI-powered customer feedback sentiment and theme analyzer."
+    >
+
+    <title>
+        AI Customer Feedback Analyzer
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- ================================= -->
+    <!-- HEADER -->
+    <!-- ================================= -->
+
+    <header class="header">
+
+        <div class="logo">
+            🤖
+        </div>
+
+        <h1>
+            AI Customer Feedback Analyzer
+        </h1>
+
+        <p>
+            Analyze customer sentiment,
+            identify recurring concerns,
+            and explore feedback trends using NLP.
+        </p>
+
+    </header>
+
+
+
+    <!-- ================================= -->
+    <!-- STATISTICS -->
+    <!-- ================================= -->
+
+    <section class="stats-container">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                💬
+            </div>
+
+            <p>
+                Total Feedback
+            </p>
+
+            <h2 id="totalCount">
+                0
+            </h2>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                😊
+            </div>
+
+            <p>
+                Positive
+            </p>
+
+            <h2 id="positiveCount">
+                0
+            </h2>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                😐
+            </div>
+
+            <p>
+                Neutral
+            </p>
+
+            <h2 id="neutralCount">
+                0
+            </h2>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                😞
+            </div>
+
+            <p>
+                Negative
+            </p>
+
+            <h2 id="negativeCount">
+                0
+            </h2>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- ANALYZER -->
+    <!-- ================================= -->
+
+    <section class="analyzer-card">
+
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    Analyze Customer Feedback
+                </h2>
+
+                <p>
+                    Enter a customer comment to
+                    detect its sentiment and themes.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <label
+            for="feedback"
+            class="input-label"
+        >
+            Customer Feedback
+        </label>
+
+
+        <textarea
+            id="feedback"
+            maxlength="3000"
+            placeholder="Example: The delivery was late, but the product quality was excellent."
+        ></textarea>
+
+
+        <div class="analyzer-actions">
+
+            <span
+                id="characterCount"
+                class="character-count"
+            >
+                0 / 3000
+            </span>
+
+
+            <button id="analyzeBtn">
+
+                Analyze Feedback
+
+            </button>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- ANALYSIS RESULT -->
+    <!-- ================================= -->
+
+    <section
+        id="resultCard"
+        class="result-card hidden"
+    >
+
+
+        <h2>
+            Analysis Result
+        </h2>
+
+
+        <div class="result-row">
+
+            <span>
+                Sentiment
+            </span>
+
+            <strong
+                id="sentimentResult"
+            >
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="result-row">
+
+            <span>
+                Sentiment Score
+            </span>
+
+            <strong
+                id="confidenceResult"
+            >
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="result-row">
+
+            <span>
+                Detected Themes
+            </span>
+
+            <div id="themesResult">
+                -
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- ANALYTICS -->
+    <!-- ================================= -->
+
+    <section class="analytics-section">
+
+
+        <!-- Sentiment Chart -->
+
+        <div class="chart-card">
+
+            <div class="chart-header">
+
+                <h2>
+                    Sentiment Distribution
+                </h2>
+
+                <p>
+                    Overall analyzed customer sentiment
+                </p>
+
+            </div>
+
+
+            <div class="chart-container">
+
+                <canvas
+                    id="sentimentChart"
+                ></canvas>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Theme Chart -->
+
+        <div class="chart-card">
+
+            <div class="chart-header">
+
+                <h2>
+                    Common Feedback Themes
+                </h2>
+
+                <p>
+                    Most frequently mentioned topics
+                </p>
+
+            </div>
+
+
+            <div class="chart-container">
+
+                <canvas
+                    id="themesChart"
+                ></canvas>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- HISTORY -->
+    <!-- ================================= -->
+
+    <section class="history-card">
+
+
+        <div class="history-header">
+
+
+            <div>
+
+                <h2>
+                    Recent Feedback
+                </h2>
+
+                <p>
+                    Latest analyzed customer comments
+                </p>
+
+            </div>
+
+
+            <button
+                id="refreshBtn"
+                class="secondary-btn"
+            >
+                ↻ Refresh
+            </button>
+
+
+        </div>
+
+
+
+        <div class="table-container">
+
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Feedback
+                        </th>
+
+                        <th>
+                            Sentiment
+                        </th>
+
+                        <th>
+                            Score
+                        </th>
+
+                        <th>
+                            Themes
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="feedbackTable">
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="empty-message"
+                        >
+
+                            No feedback analyzed yet.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- FOOTER -->
+    <!-- ================================= -->
+
+    <footer class="footer">
+
+        <p>
+            AI Customer Feedback Analyzer
+        </p>
+
+        <span>
+            Python • Flask • NLP • SQLite • Chart.js
+        </span>
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- Chart.js -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/chart.js"
+></script>
+
+
+<!-- Application JavaScript -->
+
+<script
+    src="{{ url_for('static', filename='script.js') }}"
+></script>
+
+
+</body>
+
+</html>
